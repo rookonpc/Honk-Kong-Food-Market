@@ -7,4 +7,8 @@ Created by **Zain Arshad** : Team Leader, **Thomas Alexander** : Sprite Design, 
 The Hong Kong Food Market is the most peacful place of all Hong Kong... until the last mango of the season remains. The last mango produced by the suppliers of the Hong Kong
 Food Market is THE GOLDEN MANGO. THE GOLDEN MANGO is the most desired fruit of all Hong Kong, and when all remains is THE GOLDEN MANGO, a war starts on who will eat the last  powerful GOLDEN MANGO. The battle continues on for days until two of the most strongest tomato sellers are left fighting to gain the GOLDEN MANGO.
 
+Our game had many inpirations, some of these games are :
+  - Mortal Kombat
+  - Street Fighter
+
 ### Citations: 

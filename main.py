@@ -10,7 +10,7 @@ running = True
 value1 = 0
 value2 = 0
 run = True
-moving1 = False
+moving = False
 moving2 = False
 velocity = 12
 
@@ -31,7 +31,6 @@ menuButton = pygame.transform.rotozoom(menuButton,0,0.25)
 
 #Loading in the sprites
 playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
-playerOne = pygame.transform.rotozoom(playerOne,0,5)
 playerOneRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_0.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_1.png")).convert_alpha(), 
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_2.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_3.png")).convert_alpha(), 
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_4.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_5.png")).convert_alpha(), 
@@ -39,8 +38,11 @@ playerOneRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run
 playerOneIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()]
 
 playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
-playerTwo = pygame.transform.rotozoom(playerTwo,0,5)
-
+playerTwoRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_0.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_1.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_2.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_3.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_4.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_5.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_6.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_7.png")).convert_alpha()]
+playerTwoIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()]
 
 gameActive = False
 instructions = False
@@ -72,48 +74,58 @@ while running:
                 if startButtonRect.collidepoint(event.pos):
                     gameActive = True
     if gameActive:
+        
         if keys[pygame.K_a]:
             if playerOneRect.x >= 0:
                 playerOneRect.x -= 20
                 value1 += 1
-                moving1 = True
+                moving = True
                 if value1 >= len(playerOneRun):
                     value1 = 0
+            else:
+                moving = False     
+                playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
         elif keys[pygame.K_d]:
             if playerOneRect.x <= 1700:
                 playerOneRect.x +=20
                 value1 += 1
-                moving1 = True
+                moving = True
                 if value1 >= len(playerOneRun):
                     value1 = 0
-
-        elif keys[pygame.K_l]:
+            else:
+                moving = False     
+                playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
+        if keys[pygame.K_l]:
             if playerTwoRect.x <= 1700:
                 playerTwoRect.x += 20
                 value2 += 1
                 moving2 = True
                 if value2 >= len(playerTwoRun):
                     value2 = 0
-        elif keys[pygame.K_j]:
+        else:
+            moving2 = False
+            if playerTwoRect.x <= 1700 and playerTwoRect.x >= 0:
+                playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
+
+        if keys[pygame.K_j]:
             if playerTwoRect.x >= 0:
                 playerTwoRect.x -=20
                 moving2 = True
                 if value2 >= len(playerTwoRun):
                     value2 = 0
-        else:
-            value2 = 0
-            moving2 = False
-            playerTwo = playerTwoIdle[value2]
-            value1 = 0
-            moving1 = False
-            playerOne = playerOneIdle[value1]
+            else:
+                moving2 = False
+                playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
+
+            
+            
         
-        if event.type == pygame.MOUSEBUTTONDOWN:
-                if howToPlayButtonRect.collidepoint(event.pos):
-                    instructions = True
-                if menuButtonRect.collidepoint(event.pos):
-                    instructions = False
-        
+    if event.type == pygame.MOUSEBUTTONDOWN:
+            if howToPlayButtonRect.collidepoint(event.pos):
+                instructions = True
+            if menuButtonRect.collidepoint(event.pos):
+                instructions = False
+    
         
     
     
@@ -141,13 +153,15 @@ while running:
 
     clock.tick(60)  # limits FPS to 60
     
-    if moving1:
+    if moving:
         playerOne = playerOneRun[value1]
-    elif moving2:
+    else:
+        playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
+    
+    if moving2:
         playerTwo = playerTwoRun[value2]
     else:
-        playerOne = playerOne
-        playerTwo = playerTwo
-    playerOne = pygame.transform.rotozoom(playerOne,0,5)
+        playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
+
 
 pygame.quit()

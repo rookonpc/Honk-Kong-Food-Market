@@ -14,7 +14,10 @@ value2 = 0
 run = True
 moving = False
 moving2 = False
-velocity = 12
+velocity = 6
+roundOne = False
+punchOne = False
+punchValue = 0
 
 testFont = pygame.font.Font(os.path.join(scriptDir, "Fonts", "Unbounded-VariableFont_wght.ttf"), 60)
 
@@ -29,7 +32,7 @@ howToPlayButton = pygame.transform.rotozoom(howToPlayButton,3,1)
 menuButton = pygame.image.load(os.path.join(scriptDir,"Buttons", "Menu.png"))
 menuButton = pygame.transform.rotozoom(menuButton,0,0.25)
 backgroundMusic = os.path.join(scriptDir,"Sounds","Background.wav")
-
+roundOneImg = pygame.image.load(os.path.join(scriptDir, "Background", 'bck.png')).convert_alpha()
 
 #Loading in the sprites
 playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
@@ -38,6 +41,8 @@ playerOneRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_4.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_5.png")).convert_alpha(), 
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_6.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_7.png")).convert_alpha()]
 playerOneIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()]
+playerOnePunch = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_0.png")).convert_alpha(),pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_1.png")).convert_alpha(),
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_2.png")).convert_alpha(),pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_3.png")).convert_alpha()]
 
 playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
 playerTwoRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_0.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_1.png")).convert_alpha(), 
@@ -59,8 +64,8 @@ howToPlayButtonRect = howToPlayButton.get_rect(center = ( 620,700))
 menuButtonRect = menuButton.get_rect(topleft = (740,500))
 
 #Sprite Rectangles
-playerOneRect = playerOne.get_rect(bottomleft = (200,800))
-playerTwoRect = playerTwo.get_rect(bottomleft = (1300,800))
+playerOneRect = playerOne.get_rect(bottomleft = (200,1000))
+playerTwoRect = playerTwo.get_rect(bottomleft = (1300,1000))
 
 #This loads the images
 
@@ -80,8 +85,23 @@ while running:
             if startButtonRect.collidepoint(event.pos):
                 gameActive = True 
         
+        if keys[pygame.K_f]:
+            punchOne = True
+            punchValue += 1
+            print(punchValue)
+            if punchValue >= len(playerOnePunch):
+                
+                punchValue = 0
+        else:
+            punchOne = False
+        
     if gameActive:
+        
         pygame.mixer.music.stop()
+        
+        
+            
+            
         if keys[pygame.K_a] and playerOneRect.x >= 0:
             playerOneRect.x -= 20
             value1 += 1
@@ -114,6 +134,10 @@ while running:
             moving2 = False
             playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
             
+        
+            
+
+
     if keys[pygame.K_t]:    
         running = False        
         
@@ -137,7 +161,7 @@ while running:
             screen.blit(instructions_image,(0,0))
             screen.blit(menuButton,menuButtonRect)
     else:
-        screen.fill('black')
+        screen.blit(roundOneImg,(0,0))
         screen.blit(playerOne, (playerOneRect))
         screen.blit(playerTwo, (playerTwoRect))
         screen.blit(playerOne, (playerOneRect.x,playerOneRect.y))
@@ -153,13 +177,18 @@ while running:
     if moving:
         playerOne = playerOneRun[value1]
     else:
-        value1 = 0
         playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
     
+    if punchOne:
+        playerOne = playerOnePunch[punchValue]
+        
     if moving2:
         playerTwo = playerTwoRun[value2]
     else:
         playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
 
+    
+
+    pygame.display.update()
 
 pygame.quit()

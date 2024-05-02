@@ -1,9 +1,11 @@
 import pygame
 import os
+from pygame import mixer 
 
 scriptDir = os.path.dirname(os.path.abspath(__file__))
 # pygame setup  
 pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((1920, 1080))
 clock = pygame.time.Clock()
 running = True
@@ -26,7 +28,7 @@ howToPlayButton = testFont.render("Instructions", True, "Black")
 howToPlayButton = pygame.transform.rotozoom(howToPlayButton,3,1)
 menuButton = pygame.image.load(os.path.join(scriptDir,"Buttons", "Menu.png"))
 menuButton = pygame.transform.rotozoom(menuButton,0,0.25)
-
+backgroundMusic = os.path.join(scriptDir,"Sounds","Background.wav")
 
 
 #Loading in the sprites
@@ -62,63 +64,58 @@ playerTwoRect = playerTwo.get_rect(bottomleft = (1300,800))
 
 #This loads the images
 
+pygame.mixer.music.load(backgroundMusic)
+pygame.mixer.music.play()
 while running:
     keys = pygame.key.get_pressed()
 
+    
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-                if startButtonRect.collidepoint(event.pos):
-                    gameActive = True
-    if gameActive:
+
+        if event.type == pygame.MOUSEBUTTONDOWN: 
+            if startButtonRect.collidepoint(event.pos):
+                gameActive = True 
         
-        if keys[pygame.K_a]:
-            if playerOneRect.x >= 0:
-                playerOneRect.x -= 20
-                value1 += 1
-                moving = True
-                if value1 >= len(playerOneRun):
-                    value1 = 0
-            else:
-                moving = False     
-                playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
-        elif keys[pygame.K_d]:
-            if playerOneRect.x <= 1700:
-                playerOneRect.x +=20
-                value1 += 1
-                moving = True
-                if value1 >= len(playerOneRun):
-                    value1 = 0
-            else:
-                moving = False     
-                playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
-        if keys[pygame.K_l]:
-            if playerTwoRect.x <= 1700:
-                playerTwoRect.x += 20
-                value2 += 1
-                moving2 = True
-                if value2 >= len(playerTwoRun):
-                    value2 = 0
+    if gameActive:
+        pygame.mixer.music.stop()
+        if keys[pygame.K_a] and playerOneRect.x >= 0:
+            playerOneRect.x -= 20
+            value1 += 1
+            moving = True
+            if value1 >= len(playerOneRun):
+                value1 = 0
+        elif keys[pygame.K_d] and playerOneRect.x <= 1700:
+            playerOneRect.x +=20
+            value1 += 1
+            moving = True
+            if value1 >= len(playerOneRun):
+                value1 = 0
+        else:
+            moving = False 
+            playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
+
+        if keys[pygame.K_j] and playerTwoRect.x >= 0:
+            playerTwoRect.x -=20
+            value2 += 1
+            moving2 = True
+            if value2 >= len(playerTwoRun):
+                value2 = 0        
+        elif keys[pygame.K_l] and playerTwoRect.x <= 1700:
+            playerTwoRect.x += 20
+            value2 += 1
+            moving2 = True
+            if value2 >= len(playerTwoRun):
+                value2 = 0        
         else:
             moving2 = False
-            if playerTwoRect.x <= 1700 and playerTwoRect.x >= 0:
-                playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
-
-        if keys[pygame.K_j]:
-            if playerTwoRect.x >= 0:
-                playerTwoRect.x -=20
-                moving2 = True
-                if value2 >= len(playerTwoRun):
-                    value2 = 0
-            else:
-                moving2 = False
-                playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
-
+            playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
             
-            
+    if keys[pygame.K_t]:    
+        running = False        
         
     if event.type == pygame.MOUSEBUTTONDOWN:
             if howToPlayButtonRect.collidepoint(event.pos):
@@ -126,7 +123,6 @@ while running:
             if menuButtonRect.collidepoint(event.pos):
                 instructions = False
     
-        
     
     
     # fill the screen with a color to wipe away anything from last frame
@@ -136,6 +132,7 @@ while running:
         # screen.blit(startScreen,startScreenRect)
         screen.blit(startButton,startButtonRect)
         screen.blit(howToPlayButton,howToPlayButtonRect)
+
         if instructions == True:
             screen.blit(instructions_image,(0,0))
             screen.blit(menuButton,menuButtonRect)
@@ -156,6 +153,7 @@ while running:
     if moving:
         playerOne = playerOneRun[value1]
     else:
+        value1 = 0
         playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
     
     if moving2:

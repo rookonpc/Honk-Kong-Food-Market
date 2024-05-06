@@ -9,15 +9,21 @@ pygame.mixer.init()
 screen = pygame.display.set_mode((1920, 1080))
 clock = pygame.time.Clock()
 running = True
-value1 = 0
+value1left = 0
+value1right = 0
 value2 = 0
 run = True
-moving = False
+movingR = False
+movingL = False
 moving2 = False
 velocity = 6
 roundOne = False
 punchOne = False
-punchValue = 0
+punchTwo = False
+punchValue1 = 0
+punchValue2 = 0
+rightRun = False
+leftRun = False
 
 testFont = pygame.font.Font(os.path.join(scriptDir, "Fonts", "Unbounded-VariableFont_wght.ttf"), 60)
 
@@ -40,16 +46,25 @@ playerOneRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_2.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_3.png")).convert_alpha(), 
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_4.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_5.png")).convert_alpha(), 
                 pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_6.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Run","PlayerOneRun_7.png")).convert_alpha()]
+playerOneRunInverted = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_0INV.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_1INV.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_2INV.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_3INV.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_4INV.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_5INV.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_6INV.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Run","PlayerOneRun_7INV.png")).convert_alpha()]
 playerOneIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()]
-playerOnePunch = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_0.png")).convert_alpha(),pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_1.png")).convert_alpha(),
-                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_2.png")).convert_alpha(),pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_3.png")).convert_alpha()]
+playerOnePunch = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_0.png")).convert_alpha(),
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_1.png")).convert_alpha(),
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_2.png")).convert_alpha(),
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Attack","PlayerPunch_3.png")).convert_alpha()
+                ]
 
-playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
-playerTwoRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_0.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_1.png")).convert_alpha(), 
-                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_2.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_3.png")).convert_alpha(), 
-                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_4.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_5.png")).convert_alpha(), 
-                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_6.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Run","PlayerTwoRun_7.png")).convert_alpha()]
-playerTwoIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()]
+playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Idle","PlayerTwo_0.png")).convert_alpha()
+playerTwoRun = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_0.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_1.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_2.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_3.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_4.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_5.png")).convert_alpha(), 
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_6.png")).convert_alpha(), pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Run","PlayerTwoRun_7.png")).convert_alpha()]
+playerTwoIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Idle","PlayerTwo_0.png")).convert_alpha()]
+playerTwoPunch = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Attack","PlayerTwoPunch_0.png")).convert_alpha(),pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Attack","PlayerTwoPunch_1.png")).convert_alpha(),
+                pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Attack","PlayerTwoPunch_2.png")).convert_alpha(),pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Attack","PlayerTwoPunch_3.png")).convert_alpha()]
 
 gameActive = False
 instructions = False
@@ -85,54 +100,88 @@ while running:
             if startButtonRect.collidepoint(event.pos):
                 gameActive = True 
         
-        if keys[pygame.K_f]:
-            punchOne = True
-            punchValue += 1
-            print(punchValue)
-            if punchValue >= len(playerOnePunch):
-                
-                punchValue = 0
-        else:
-            punchOne = False
+        
         
     if gameActive:
         
         pygame.mixer.music.stop()
         
-        
-            
-            
         if keys[pygame.K_a] and playerOneRect.x >= 0:
-            playerOneRect.x -= 20
-            value1 += 1
-            moving = True
-            if value1 >= len(playerOneRun):
-                value1 = 0
+            leftRun = True
+            playerOneRect.x -= 15
+            value1left += 1
+            movingR = True
+            if value1left >= len(playerOneRunInverted):
+                value1left = 0
+                
+            if keys[pygame.K_f]:
+                punchOne = True
+                punchValue1 += 1
+                if punchValue1 >= len(playerOnePunch):
+                    punchValue1 = 0
+            else:
+                punchOne = False
         elif keys[pygame.K_d] and playerOneRect.x <= 1700:
-            playerOneRect.x +=20
-            value1 += 1
-            moving = True
-            if value1 >= len(playerOneRun):
-                value1 = 0
-        else:
-            moving = False 
-            playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
-
+            rightRun = True
+            playerOneRect.x += 15
+            value1right += 1
+            movingL = True
+            if value1right >= len(playerOneRun):
+                value1right = 0
+                
+            if keys[pygame.K_f]:
+                punchOne = True
+                punchValue1 += 1
+                if punchValue1 >= len(playerOnePunch):
+                    punchValue1 = 0
+            else:
+                punchOne = False
+        else: 
+            if keys[pygame.K_f]:
+                punchOne = True
+                punchValue1 += 1
+                if punchValue1 >= len(playerOnePunch):
+                    punchValue1 = 0
+            else:
+                punchOne = False  
+                playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
+            
         if keys[pygame.K_j] and playerTwoRect.x >= 0:
-            playerTwoRect.x -=20
+            playerTwoRect.x -= 15
             value2 += 1
             moving2 = True
             if value2 >= len(playerTwoRun):
-                value2 = 0        
+                value2 = 0  
+            if keys[pygame.K_h]:
+                punchTwo = True
+                punchValue2 += 1
+                if punchValue2 >= len(playerTwoPunch):
+                    punchValue2 = 0   
+            else:
+                punchTwo = False
         elif keys[pygame.K_l] and playerTwoRect.x <= 1700:
-            playerTwoRect.x += 20
+            playerTwoRect.x += 15
             value2 += 1
             moving2 = True
             if value2 >= len(playerTwoRun):
-                value2 = 0        
+                value2 = 0 
+            if keys[pygame.K_h]:
+                punchTwo = True
+                punchValue2 += 1
+                if punchValue2 >= len(playerTwoPunch):
+                    punchValue2 = 0   
+            else:
+                punchTwo = False
         else:
             moving2 = False
-            playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
+            if keys[pygame.K_h]:
+                punchTwo = True
+                punchValue2 += 1
+                if punchValue2 >= len(playerTwoPunch):
+                    punchValue2 = 0
+            else:
+                punchTwo = False  
+                playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Idle","PlayerTwo_0.png")).convert_alpha()
             
         
             
@@ -172,20 +221,29 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.update()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(24)  # limits FPS to 60
     
-    if moving:
-        playerOne = playerOneRun[value1]
+    if rightRun == True and movingR == True:
+        playerOne = playerOneRun[value1right]
     else:
         playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One/Idle","PlayerOne_0.png")).convert_alpha()
-    
-    if punchOne:
-        playerOne = playerOnePunch[punchValue]
         
+    if leftRun == True and movingL == True:
+        playerOne = playerOneRunInverted[value1left]
+    else:
+        playerOne = pygame.image.load(os.path.join(scriptDir, "Sprite/Player One Inverted/Idle","PlayerOne_0INV.png")).convert_alpha()
+    
     if moving2:
         playerTwo = playerTwoRun[value2]
     else:
-        playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Player 2/Idle","PlayerTwo_0.png")).convert_alpha()
+        playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Idle","PlayerTwo_0.png")).convert_alpha()
+    
+    if punchOne:
+        playerOne = playerOnePunch[punchValue1]    
+    if punchTwo:
+        playerTwo = playerTwoPunch[punchValue2]
+        
+    
 
     
 

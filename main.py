@@ -43,8 +43,8 @@ class HealthBar():
         pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))
         pygame.draw.rect(surface, "green", (self.x, self.y, self.w * ratio, self.h))
 
-health_bar_player1 = HealthBar(250, 200, 300, 60, 100)
-health_bar_player2 = HealthBar(1370, 200, 300, 60, 100)
+health_bar_player1 = HealthBar(250, 200, 500, 60, 100)
+health_bar_player2 = HealthBar(1370, 200, 500, 60, 100)
 
 testFont = pygame.font.Font(os.path.join(scriptDir, "Fonts", "Unbounded-VariableFont_wght.ttf"), 60)
 
@@ -252,4 +252,3 @@ while running:
         playerTwo = playerTwoPunch[punchValue2]
 
 pygame.quit()
-

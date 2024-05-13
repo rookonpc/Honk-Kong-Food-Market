@@ -14,4 +14,15 @@ Our game had many inpirations, some of these games are :
   - **Street Fighter**
   - **Fire Boy and Water girl**
 
+## Intructions
+### Player One
+    - "A" to move left
+    - "D" To move right
+    - "F" To punch
+### Player Two
+    - "J" to move left
+    - "L" To move right
+    - "H" To punch
+#### Objective
+    - Best out of three rounds wins. Punch your opponate to drain their health. Watch your health while fighting and win the rounds.
 ### Citations: 

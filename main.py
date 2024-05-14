@@ -9,6 +9,7 @@ pygame.mixer.init()
 screen = pygame.display.set_mode((1920, 1080))
 clock = pygame.time.Clock()
 running = True
+#Values for our running animation, default to 0 and false
 value1left = 0
 value1right = 0
 value2left = 0
@@ -19,15 +20,20 @@ movingLOne = False
 movingRTwo = False
 movingLTwo = False
 velocity = 6
+#Values for our rounds
 roundOne = False
 punchOne = False
 punchTwo = False
+#Values for punch animation
 punchValue1 = 0
 punchValue2 = 0
 rightRunOne = False
 leftRunOne = False
 rightRunTwo = False
 leftRunTwo = False
+
+"""Healthbar class is situated in the top right and left of each player's respective side. The health bar will become more red as the player loses health by being hit
+if the player gets hit enough times, the round is over"""
 
 class HealthBar():
     def __init__(self, x, y, w, h, max_hp):
@@ -46,9 +52,10 @@ class HealthBar():
 health_bar_player1 = HealthBar(250, 200, 500, 60, 100)
 health_bar_player2 = HealthBar(1370, 200, 500, 60, 100)
 
+#Font for the game
 testFont = pygame.font.Font(os.path.join(scriptDir, "Fonts", "Unbounded-VariableFont_wght.ttf"), 60)
 
-# Loading in all the images
+# Loading in all the images for background, start, instructions, menu, and background music
 background_image = pygame.image.load(os.path.join(scriptDir, "Background", 'background final.png'))
 instructions_image = pygame.image.load(os.path.join(scriptDir, "Background", 'Ins.png'))
 startButton = testFont.render("Start", True, "Black")
@@ -73,6 +80,7 @@ playerTwoIdle = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Id
 playerTwoPunch = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Attack", f"PlayerTwoPunch_{i}.png")).convert_alpha() for i in range(4)]
 playerTwoRunInverted = [pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two Inverted/PlayerTwoRunINV", f"PlayerTwoRun_{i}INV.png")).convert_alpha() for i in range(8)]
 
+#Screen setup, defaults to false and becomes true when clicked
 gameActive = False
 instructions = False
 roundOver = False
@@ -113,7 +121,12 @@ while running:
     if gameActive and not roundOver:
         pygame.mixer.music.stop()
 
-        # Player 1 Movement
+        """
+        Player One Movement
+        If the player presses A, player 1 moves left 15 frames
+        If the player presses D, player 1 moves right 15 frames
+        If neither is pressed player 1 does not move
+        """
         if keys[pygame.K_a] and playerOneRect.x >= 0:
             leftRunOne = True
             movingLOne = True
@@ -132,7 +145,12 @@ while running:
             movingROne = False
             movingLOne = False
 
-        # Player 2 Movement
+         """
+        Player Two Movement
+        If the player presses J, player 2 moves left 15 frames
+        If the player presses L, player 2 moves right 15 frames
+        If neither is pressed player 2 does not move
+        """
         if keys[pygame.K_j] and playerTwoRect.x >= 0:
             leftRunTwo = True
             movingLTwo = True
@@ -151,7 +169,12 @@ while running:
             movingRTwo = False
             movingLTwo = False
 
-        # Player 1 Punch
+        """
+        Player One Punch
+        If the player presses F, player one punches
+            If the player collides with player 2, the healthbar of player 2 will go down 10
+        Else the player will not punch
+        """
         current_time = time.time()
         if keys[pygame.K_f] and current_time - last_punch_time_player1 >= punch_cooldown:
             punchOne = True
@@ -164,7 +187,12 @@ while running:
         else:
             punchOne = False
 
-        # Player 2 Punch
+        """
+        Player Two Punch
+        If the player presses H, player two punches
+            If the player collides with player 1, the healthbar of player 1 will go down 10
+        Else the player will not punch
+        """
         if keys[pygame.K_h] and current_time - last_punch_time_player2 >= punch_cooldown:
             punchTwo = True
             punchValue2 += 1
@@ -176,13 +204,16 @@ while running:
         else:
             punchTwo = False
 
-        # Check for game end conditions
+        """
+        If either of the player bars is less than or equal zero, the round will end
+        and the next round will start
+        """
         if health_bar_player1.hp <= 0 or health_bar_player2.hp <= 0:
             roundOver = True
-
+    #If t is pressed the game will end
     if keys[pygame.K_t]:
         running = False
-
+    #Checks if the mouse down button is collided with the menu buttons
     if event.type == pygame.MOUSEBUTTONDOWN:
         if howToPlayButtonRect.collidepoint(event.pos):
             instructions = True
@@ -198,7 +229,7 @@ while running:
         if instructions == True:
             screen.blit(instructions_image, (0, 0))
             screen.blit(menuButton, menuButtonRect)
-    elif not roundOver:
+    elif not roundOver:    #Will run if the round is starting, sets up the next game
         screen.blit(roundOneImg, (0, 0))
         screen.blit(playerOne, (playerOneRect))
         screen.blit(playerTwo, (playerTwoRect))
@@ -206,7 +237,7 @@ while running:
         screen.blit(playerTwo, (playerTwoRect.x, playerTwoRect.y))
         health_bar_player1.draw(screen)
         health_bar_player2.draw(screen)
-    else:
+    else:    #Game over screen, checks to see whether player one wins or player two, and will display the victory screen corresponding to the player who wins
         screen.fill((0, 0, 0))
         winner_font = pygame.font.Font(None, 100)
         winner_text = "Player 2 Wins!" if health_bar_player1.hp <= 0 else "Player 1 Wins!"
@@ -232,6 +263,11 @@ while running:
     clock.tick(60)  # Limits FPS to 24
     animation_clock.tick(24)  # Limits punch animation FPS to 12
 
+    """
+    The player animation conditions will check to see if the player is facing right or left
+    If the player is facing a certain direction the condition will use that direction's values for the corresponding player
+    Else the player will remain idle if not moving
+    """
     if rightRunOne and movingROne:
         playerOne = playerOneRun[value1right]
     elif leftRunOne and movingLOne:
@@ -246,6 +282,7 @@ while running:
     else:
         playerTwo = pygame.image.load(os.path.join(scriptDir, "Sprite/Player Two/Idle", "PlayerTwo_0.png")).convert_alpha()
 
+    #Checks if each player's punch value is true and plays the punch animation if so
     if punchOne:
         playerOne = playerOnePunch[punchValue1]
     if punchTwo:

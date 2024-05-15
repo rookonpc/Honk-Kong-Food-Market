@@ -27,5 +27,5 @@ Our game had many inpirations, some of these games are :
     - Best out of three rounds wins. Punch your opponate to drain their health.
       Watch your health while fighting and win the rounds.
 ### Citations: 
-Menu music: https://www.youtube.com/watch?v=Q_h7XszYtsw&t=24s
-Piskel for sprites: https://www.piskelapp.com/
+Menu music: D.O channel. “Chinese Music - Free to Use [No Copyright].” YouTube, 22 Jan. 2020, www.youtube.com/watch?v=Q_h7XszYtsw&t=24s. Accessed 15 May 2024.
+Piskel for sprites: Descottes, Julian. “Piskel - Free Online Sprite Editor.” Piskelapp.com, 2019, www.piskelapp.com/.

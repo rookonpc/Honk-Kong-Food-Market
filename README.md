@@ -26,3 +26,5 @@ Our game had many inpirations, some of these games are :
 #### Objective
     - Best out of three rounds wins. Punch your opponate to drain their health. Watch your health while fighting and win the rounds.
 ### Citations: 
+Menu music: https://www.youtube.com/watch?v=Q_h7XszYtsw&t=24s
+Piskel for sprites: https://www.piskelapp.com/
